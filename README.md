@@ -63,9 +63,30 @@ Complete a month cost analysis of each Azure resource to give an estimate total 
 
 | Azure Resource | Service Tier | Monthly Cost |
 | ------------ | ------------ | ------------ |
-| *Azure Postgres Database* |     |              |
-| *Azure Service Bus*   |         |              |
-| ...                   |         |              |
+| *Azure Postgres Database* | Basic (1 vCore, 5 GB)    |   $25.32           |
+| *Azure Service Bus*   |   Basic      |              $0.05 1M Operations |
+| *App Service Plan (for Web App)*     |   F1     |    $0          |
+| *App Service Plan (for Func App)* | Consumption(serverless)  | $0.20 1M Executions |
+| *Storage* | Hot | $0.0287 |
+| *Total* | Free and basic tier | ~$25.32 |
+
+It seems that the cost of the rest except the DB server is still too cheap (< $1)
 
 ## Architecture Explanation
 This is a placeholder section where you can provide an explanation and reasoning for your architecture selection for both the Azure Web App and Azure Function.
+
+**Azure Web App**:
+| Criteria | Azure Web App | VMs |
+| ------------ | ------------ | ------------ |
+| *Usability* | Easy and quick setup, no concerns about software installtion  |  Requires more configuration            |
+| *Cost* | 1.7 x cheaper than VMs (Basic tier)   |   Expensive           |
+| *Resources need*   |   < 14GB or < 4CPUs      |     > 14GB or > 4CPUs         |
+| *Scalability*     |  Scale limit ~ the necessary requirement of the app      |  Scale limit > the necessary requirement of the app           |
+
+**Azure Function**: Best suited for smaller apps that can work independently of other websites
+- Automatic scaling
+-Easier to integratre with Logic apps
+- Lightweight, stateless and short lived -> don't need Web servers / VMs to deploy and run
+- Easier to write and deploy: it's only a piece of code that is written to do a specific task, don't need many developers to do that
+- Be supported in both Linux and Windows enviroment (only C# in Azure WebJobs)
+- Support many common programming languages: C#, JS, Java, Python (only C# in Azure WebJobs)
